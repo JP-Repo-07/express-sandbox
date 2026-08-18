@@ -3,7 +3,7 @@ const { dbAction } = require('../utils/db/db');
 const bcrypt = require('bcryptjs');
 
 
-async function createUserFunc(payload, db) {
+async function createUserFunc(payload) {
 
     const existingUser = await dbAction('users', 'findone', { email: payload.email });
     if (existingUser) {
@@ -29,7 +29,7 @@ async function createUserFunc(payload, db) {
     return collection;
 }
 
-async function updateUserFunc(userId, payload, db) {
+async function updateUserFunc(userId, payload) {
     const data = {
         ...payload,
         updatedAt: new Date(),

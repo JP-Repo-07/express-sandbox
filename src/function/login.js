@@ -1,7 +1,9 @@
 const { ObjectId } = require('mongodb');
 const { dbAction } = require('../utils/db/db');
+const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
 
-async function loginFunc(payload, db) {
+async function loginFunc(payload) {
 
     const existingUser = await dbAction('users', 'findone', { email: payload.email });
     if (!existingUser) {
@@ -30,7 +32,7 @@ async function loginFunc(payload, db) {
 
         const updateData = { failedAttempts: failedAttempt, lockUntil: lockUntil, updatedAt: new Date() };
 
-        const updateAction = await dbAction(db, 'users', 'update', { _id: existingUser?._id }, updateData);
+        const updateAction = await dbAction('users', 'update', { _id: existingUser?._id }, updateData);
 
         const error = new Error("Invalid email or password");
         error.status = 401;
@@ -38,7 +40,7 @@ async function loginFunc(payload, db) {
     }
 
     // Reset failed attempts
-    await dbAction(db, 'users', 'update', { _id: existingUser._id }, {
+    await dbAction('users', 'update', { _id: existingUser._id }, {
         failedAttempts: 0,
         lockUntil: null,
         updatedAt: new Date()
