@@ -3,7 +3,7 @@ const { dbAction } = require('../utils/db/db');
 
 async function loginFunc(payload, db) {
 
-    const existingUser = await dbAction(db, 'users', 'findone', { email: payload.email });
+    const existingUser = await dbAction('users', 'findone', { email: payload.email });
     if (!existingUser) {
         const error = new Error("Invalid email or password");
         error.status = 401;

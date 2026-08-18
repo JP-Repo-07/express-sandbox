@@ -4,7 +4,6 @@ const { loginSchema } = require('../utils/schema/login');
 const { loginFunc } = require('../function/login');
 
 async function login(req, res) {
-    const db = req.app.locals.db;
     const validation = validate(loginSchema, req.body || {}); // Validate the request body
 
     if (!validation.valid) {
@@ -14,7 +13,7 @@ async function login(req, res) {
         throw error;
     }
 
-    const { token, message } = await loginFunc(validation.data, db);
+    const { token, message } = await loginFunc(validation.data);
 
     // Set secure cookie
     res.cookie("token", token, {

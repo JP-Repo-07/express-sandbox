@@ -5,7 +5,7 @@ const bcrypt = require('bcryptjs');
 
 async function createUserFunc(payload, db) {
 
-    const existingUser = await dbAction(db, 'users', 'findone', { email: payload.email });
+    const existingUser = await dbAction('users', 'findone', { email: payload.email });
     if (existingUser) {
         const error = new Error("User with this email already exists");
         error.status = 400;
@@ -25,7 +25,7 @@ async function createUserFunc(payload, db) {
         updatedAt: new Date(),
     };
 
-    const collection = await dbAction(db, 'users', 'post', {}, data);
+    const collection = await dbAction('users', 'post', {}, data);
     return collection;
 }
 
@@ -34,7 +34,7 @@ async function updateUserFunc(userId, payload, db) {
         ...payload,
         updatedAt: new Date(),
     }
-    const collection = await dbAction(db, 'users', 'update', { _id: new ObjectId(userId) }, data);
+    const collection = await dbAction('users', 'update', { _id: new ObjectId(userId) }, data);
     return collection;
 }
 

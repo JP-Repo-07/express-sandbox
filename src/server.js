@@ -6,15 +6,6 @@ const { connectDB } = require('./config/config');
 const app = express();
 
 app.use(express.json());
-
-app.use(async (req, res, next) => {
-  if (!app.locals.db) {
-    app.locals.db = await connectDB(); // connect once, cache
-  }
-  req.db = app.locals.db; // pass along
-  next();
-});
-
 app.use('/api', router);
 app.use(errorHandler);
 

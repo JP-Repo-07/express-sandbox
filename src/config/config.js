@@ -2,17 +2,18 @@ require('dotenv').config();
 const { MongoClient } = require('mongodb');
 
 const uri = process.env.MONGODB_URI;
-let client;
-let db;
+let cachedClient = null;
+let cachedDb = null;
 
-async function connectDB() {
-  if (!db) {
-    client = new MongoClient(uri);
-    await client.connect();
-    db = client.db(); // default DB from URI
-    console.log("✅ MongoDB connected");
-  }
-  return db;
+async function getDb() {
+  if (cachedDb) return cachedDb;
+
+  cachedClient = new MongoClient(uri);
+  await cachedClient.connect();
+  cachedDb = cachedClient.db(); // default DB from URI
+  console.log("✅ MongoDB connected");
+  return cachedDb;
 }
 
-module.exports = { connectDB };
+module.exports = { getDb };
+

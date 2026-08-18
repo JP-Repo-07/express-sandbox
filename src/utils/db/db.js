@@ -1,5 +1,8 @@
+const { getDb } = require("../../config/config");
+
 // src/utils/dbHelper.js
-async function dbAction(db, collectionName, action, query = {}, data = {}) {
+async function dbAction(collectionName, action, query = {}, data = {}) {
+  const db = await getDb(); // ✅ connection handled internally
   const collection = db.collection(collectionName);
 
   switch (action.toLowerCase()) {
