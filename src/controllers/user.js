@@ -5,7 +5,7 @@ const { validate } = require('../utils/middleware/errorHandling');
 const { ObjectId } = require('mongodb');
 
 async function createUser(req, res) {
-        const db = req.app.locals.db;
+        const db = req.db;
         const validation = validate(userSchema, req.body || {}); // Validate the request body
 
         if (!validation.valid) {
