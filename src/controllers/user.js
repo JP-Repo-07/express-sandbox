@@ -46,14 +46,4 @@ async function updateUser(req, res) {
     res.status(200).json(data);
 }
 
-async function getUsers(req, res) {
-    try {
-        const db = req.app.locals.db;
-        const users = await getUserCollection(db).find().toArray();
-        res.json(users);
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
-}
-
-module.exports = { createUser, updateUser, getUsers };
+module.exports = { createUser, updateUser };
