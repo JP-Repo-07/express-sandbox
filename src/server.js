@@ -1,10 +1,26 @@
+const express = require('express');
+const router = require('./route/route');
+const { errorHandler } = require('./utils/middleware/errorHandling');
 const { connectDB } = require('./config/config');
-const app = require('./app');
 
+const app = express();
+
+app.use(express.json());
+app.use('/', router);
+app.use(errorHandler);
+
+// Connect DB once and cache
 (async () => {
-  const db = await connectDB();   // connect once
-  app.locals.db = db;             // store db in app.locals
+    const db = await connectDB();
+    app.locals.db = db;
 
-  const PORT = process.env.PORT || 5000;
-  app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+
+    // ✅ Conditional: local dev vs Vercel
+    if (process.env.NODE_ENV !== 'production') {
+        const PORT = process.env.PORT || 5000;
+        app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+    }
 })();
+
+
+module.exports = app;
